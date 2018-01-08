@@ -9,7 +9,7 @@ class UserModelTestCase(unittest):
 
     def test_no_password_getter(self):
         u=User(password='cat')
-        with self.assertRaises(u.verity_password('cat')):
+        with self.assertRaises(AttributeError):
             u.password
 
     def test_password_verfication(self):
