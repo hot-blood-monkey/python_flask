@@ -4,9 +4,9 @@ from flask_bootstrap import Bootstrap
 from wtforms import StringField,SubmitField
 from wtforms.validators import Required
 
-app = Flask(__name__)
-app.config['SECRET_KEY']='ni cao'
-bootstrap=Bootstrap(app)
+# app = Flask(__name__)
+# app.config['SECRET_KEY']='ni cao'
+# bootstrap=Bootstrap(app)
 
 class NameForm(FlaskForm):
     name=StringField('你的名字？',validators=[Required()])
