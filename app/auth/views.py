@@ -26,7 +26,7 @@ def register():
     if form.validate_on_submit():
         user=User(email=form.email.data,username=form.username.data,password=form.password.data)
         db.session.add(user)
-        db.session.commit(ConnectionResetError)
+        db.session.commit()
         token = user.generate_confirmation_token()
         send_email(user.email,'确认你的账户','auth/email/confirm',user=user,token=token)
         flash("注册邮件已经发送到您的邮箱了,请及时注册")
