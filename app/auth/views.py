@@ -26,7 +26,7 @@ def register():
     if form.validate_on_submit():
         user=User(email=form.email.data,username=form.username.data,password=form.password.data)
         db.session.add(user)
-        db.session.commit()
+        db.session.commit(ConnectionResetError)
         token = user.generate_confirmation_token()
         send_email(user.email,'确认你的账户','auth/email/confirm',user=user,token=token)
         flash("注册邮件已经发送到您的邮箱了,请及时注册")
@@ -48,12 +48,12 @@ def confirm(token):
 
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated() and not current_user.confirmed and request.endpoint[:5] !='auth.':
+    if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] !='auth.' and request.endpoint != 'static':
         return redirect(url_for('auth.unconfirmed'))
 
 @auth.route('/unconfirmed')
 def unconfirmed():
-    if current_user.is_anonymous() or current_user.confirmed:
+    if current_user.is_anonymous or current_user.confirmed:
         return redirect('main.index')
     return render_template('auth/unconfirmed.html')
 

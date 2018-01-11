@@ -3,13 +3,10 @@ from . import db
 from . import login_manager
 
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import UserMixin,login_required,AnonymousUserMixin
+from flask_login import UserMixin,AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 
-# app.config['SQLALCHEMY_DATABASE_URI']="mysql+pymysql://root:123456@localhost:3306/test"
-# app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 class Permission:
     FOLLOW  = 0x01
@@ -26,6 +23,11 @@ class Role(db.Model):
     permissions = db.Column(db.Integer)
 
     users=db.relationship('User',backref='role',lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions = 0
 
     @staticmethod
     def insert_roles():
