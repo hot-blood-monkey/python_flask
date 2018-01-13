@@ -19,6 +19,13 @@ def login():
         flash('Invalid username or password.')
     return render_template('auth/login.html',form=form)
 
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('您的账户已经成功退出')
+    return redirect(url_for('main.index'))
+
 
 @auth.route('/register',methods=['GET','POST'])
 def register():
@@ -48,8 +55,10 @@ def confirm(token):
 
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] !='auth.' and request.endpoint != 'static':
-        return redirect(url_for('auth.unconfirmed'))
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed and request.endpoint[:5] !='auth.' and request.endpoint != 'static':
+            return redirect(url_for('auth.unconfirmed'))
 
 @auth.route('/unconfirmed')
 def unconfirmed():
@@ -66,9 +75,6 @@ def resend_confirmation():
     return redirect(url_for('main.index'))
 
 
-@auth.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('您的账户已经成功退出')
-    return redirect(url_for('main.index'))
+
+
+
