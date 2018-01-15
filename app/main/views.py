@@ -24,12 +24,12 @@ def index():
 
 
 
-@main.route('/user/<username>')
-def user(username):
-    user=User.query.filter_by(username=username).first()
-    if user is None:
-        abort(404)
-    return render_template('user.html',user=user)
+# @main.route('/user/<username>')
+# def user(username):
+#     user=User.query.filter_by(username=username).first()
+#     if user is None:
+#         abort(404)
+#     return render_template('user.html',user=user)
 
 
 @main.route('/edit-profile',methods=['GET','POST'])
@@ -74,6 +74,16 @@ def edit_profile_admin(id):
     form.location  = user.location
     form.about_me = user.about_me
     return render_template('edit_profile.html',form=form,user=user)
+
+
+@main.route('/user/<username>')
+def user(username):
+    user=User.query.filter_by(username=username).first()
+    if user is None:
+        abort(404)
+    posts=user.posts.order_by(Post.timestamp.desc()).all()
+    return render_template('user.html',user=user,posts=posts)
+
 
 
 
