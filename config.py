@@ -34,7 +34,7 @@ class DevelopmentConfig(Config):
     MAIL_PASSWORD = 'zhou1995'
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
-    FLASKY_ADMIN = '290322402@qq.com'
+    FLASKY_ADMIN = '290322402@qq.com' or 'zhuohao_hunan@163.com'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or "mysql+pymysql://root:123456@localhost:3306/test"
 
 

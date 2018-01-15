@@ -37,7 +37,7 @@ class EditProfileAdminForm(FlaskForm):
 
     def __init__(self,user,*args,**kwargs):
         super(EditProfileAdminForm,self).__init__(*args,*kwargs)
-        self.role.choices=[(role.id,role.name) for role in Role.query.order_by(Role.name).all()]
+        self.role.choices=[(role.id,role.username) for role in Role.query.order_by(Role.username).all()]
         self.user = user
 
     def validate_email(self,field):
@@ -48,5 +48,8 @@ class EditProfileAdminForm(FlaskForm):
         if field.data!=self.username and User.query.filter_by(username=field.data).first():
             raise ValidationError('用户名已经存在')
 
+class PostForm(FlaskForm):
+    body = TextAreaField('记录下你的idea，或许它会惊艳世界',validators=[DataRequired()])
+    submit = SubmitField('提交')
 
 

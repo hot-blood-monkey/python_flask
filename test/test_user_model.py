@@ -1,7 +1,7 @@
 import unittest
 import time
-from ..app import create_app, db
-from ..app.models import User, AnonymousUser, Role, Permission
+from app import create_app, db
+from app.models import User, AnonymousUser, Role, Permission
 
 class UserModelTestCase(unittest):
     def test_password_setter(self):
@@ -14,7 +14,7 @@ class UserModelTestCase(unittest):
             u.password
 
     def test_password_verfication(self):
-        u=User(password = 'cat')
+        u=User(password ='cat')
         self.assertTrue=(u.verify_password('cat'))
         self.assertFalse(u.verify_password('dog'))
 

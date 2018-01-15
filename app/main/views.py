@@ -4,31 +4,24 @@ from flask_login import login_required,current_user
 
 from ..email import send_email
 from . import main
-from .forms import NameForm,EditProfileForm,EditProfileAdminForm
+from .forms import NameForm,EditProfileForm,EditProfileAdminForm,PostForm
 
 from .. import db
-from ..models import User,Role
+from ..models import User,Role,Permission,Post
 from ..decorators import admin_required
 
-@main.route('/',methods=['GET','POST'])
+@main.route('/', methods=['GET', 'POST'])
 def index():
-    form = NameForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.name.data).first()
-        if user is None:
-            user = User(username=form.name.data)
-            db.session.add(user)
-            session['known'] = False
-            if current_app.config['FLASKY_ADMIN']:
-                send_email(current_app.config['FLASKY_ADMIN'], 'New User',
-                           'mail/new_user', user=user)
-        else:
-            session['known'] = True
-        session['name'] = form.name.data
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
         return redirect(url_for('.index'))
-    return render_template('index.html',
-                           form=form, name=session.get('name'),
-                           known=session.get('known', False))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', form=form, posts=posts)
+
 
 
 @main.route('/user/<username>')
@@ -47,7 +40,7 @@ def edit_profile():
         current_user.name=form.name.data
         current_user.location=form.location.data
         current_user.about_me=form.about_me.data
-        db.session.add(current_user)
+        db.session.add(current_user._get_current_object())
         flash('您的个人资料已经更新')
         return redirect(url_for('.user',username=current_user.username))
     form.name.data=current_user.name
