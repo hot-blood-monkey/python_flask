@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "bootstrap/base.html"  %}
+{% import "bootstrap/wtf.html" as wtf %}
 <!不要管没有bootstrap/base.html这个文件>
 
 {% block title %}Flask{% endblock %}
@@ -26,7 +27,13 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="#">Schlesinger</a></li>
+                {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{ url_for('main.user',username=current_user.username) }}">
+                        Profile
+                    </a>
+                </li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
