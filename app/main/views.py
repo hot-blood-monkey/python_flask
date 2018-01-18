@@ -8,7 +8,7 @@ from .forms import NameForm,EditProfileForm,EditProfileAdminForm,PostForm
 
 from .. import db
 from ..models import User,Role,Permission,Post
-from ..decorators import admin_required
+from ..decorators import admin_required,permission_required
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -111,5 +111,19 @@ def edit(id):
     form.body.data = post.body
     return render_template('edit_post.html',form=form)
 
+@main.route('/follow/<username>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def follow(username):
+    user=User.query.filter_by(username=username).first()
+    if user is None:
+        flash('无效的用户。')
+        return redirect(url_for('.index'))
+    if current_user.is_following(user):
+        flash('您已经关注过这位用户了。')
+        return redirect(url_for('.user',username=username))
+    current_user.follow(user)
+    flash('您现在已经关注了 %s .' % username)
+    return redirect(url_for('.user',username=username))
 
 
