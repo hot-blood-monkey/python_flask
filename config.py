@@ -36,6 +36,8 @@ class DevelopmentConfig(Config):
     FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
     FLASKY_ADMIN = '290322402@qq.com' or 'zhuohao_hunan@163.com'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or "mysql+pymysql://root:123456@localhost:3306/test"
+    FLASKY_POSTS_PER_PAGE=35    #每一页渲染的评论或博客数量
+    FLASKY_FOLLOWERS_PER_PAGE=50
 
 
 class TestingConfig(Config):

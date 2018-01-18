@@ -1,6 +1,7 @@
 from flask import Flask,render_template,session,redirect,url_for,flash
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
+from flask_pagedown.fields import PageDownField
 from wtforms import StringField,SubmitField,SelectField,TextAreaField,BooleanField
 from wtforms.validators import DataRequired,Length,Email,Regexp,ValidationError
 from ..models import Role,User
@@ -49,7 +50,8 @@ class EditProfileAdminForm(FlaskForm):
             raise ValidationError('用户名已经存在')
 
 class PostForm(FlaskForm):
-    body = TextAreaField('记录下你的idea，或许它会惊艳世界',validators=[DataRequired()])
+    body = PageDownField('记录下你的idea，或许它会惊艳世界',validators=[DataRequired()])  #把原来的多行文本框变成了markdown富文本`
     submit = SubmitField('提交')
+
 
 

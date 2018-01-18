@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
 {% block page_content %}
 <div class="page-header">
     <h2>
@@ -19,6 +21,15 @@
     {% endif %}
 </div>
 
-<h3>Posts by {{ user.username }}</h3>
-    {% include '_posts.html' %}
+{% include '_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
 {% endblock %}
