@@ -38,6 +38,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or "mysql+pymysql://root:123456@localhost:3306/test"
     FLASKY_POSTS_PER_PAGE=35    #每一页渲染的评论或博客数量
     FLASKY_FOLLOWERS_PER_PAGE=50
+    FLASKY_COMMENTS_PER_PAGE=10
 
 
 class TestingConfig(Config):
