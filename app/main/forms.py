@@ -53,5 +53,9 @@ class PostForm(FlaskForm):
     body = PageDownField('记录下你的idea，或许它会惊艳世界',validators=[DataRequired()])  #把原来的多行文本框变成了markdown富文本`
     submit = SubmitField('提交')
 
+class CommentForm(FlaskForm):  #评论的表单
+    body = StringField('',validators=[DataRequired()])
+    submit = SubmitField('提交')
+
 
 
